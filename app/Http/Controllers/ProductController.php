@@ -110,13 +110,13 @@ class ProductController extends Controller
 
             $product->updataProduct($request, $file_name, $product);
             
-            DB::commit();
+            DB::commit(); // ②修正済
 
         } catch (Exception $e) {
             return redirect()->route('list')->with('massage', '登録に失敗しました');
             DB::rollBack();
         }
-        return view('page/show', compact('product'));
+        return view('page/show', compact('product')); // ②修正済
         
     }
 
