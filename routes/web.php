@@ -13,26 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () {return view('welcome');});
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+Route::get('/index', function () {return view('page.index');})->name('index');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/list', [App\Http\Controllers\ProductController::class, 'showList'])->name('list');
 
-Auth::routes();
+Route::get('/regist',[App\Http\Controllers\ProductController::class, 'showRegistForm'])->name('regist');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/regist',[App\Http\Controllers\ProductController::class, 'registSubmit'])->name('submit');
 
-Auth::routes();
+Route::get('/product/{id}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/update/{id}',[App\Http\Controllers\ProductController::class, 'showUpdate'])->name('show.update');
 
-Auth::routes();
+Route::post('/update/{id}',[App\Http\Controllers\ProductController::class, 'productUpdate'])->name('product.update');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/delete/{id}', [App\Http\Controllers\ProductController::class, 'productDestroy'])->name('product.destroy');
+
+Route::post('/search', [App\Http\Controllers\ProductController::class, 'searchPost'])->name('searchPost');
+
+
+
