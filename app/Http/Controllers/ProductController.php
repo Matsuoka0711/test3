@@ -12,9 +12,8 @@ use Carbon\Carbon;
 class ProductController extends Controller
 {
     // regist(view)へ推移
-    public function showRegistForm() 
-    {
-        $companies = Company::all();
+    public function showRegistForm() {
+        $companies = Company::get();
 
         return view('page.regist', [
             'companies' => $companies,
@@ -24,11 +23,9 @@ class ProductController extends Controller
     // list(view)へ推移
     public function showList() {
         $products = Product::with('company')->paginate(4);
-        $companies = Company::all();
 
         return view('page.list', [
             'products' => $products,
-            'companies' => $companies,
         ]);
     }
 
@@ -44,12 +41,10 @@ class ProductController extends Controller
     public function showUpdate($id)
     {
         $product = Product::find($id);
-        $products = Product::with('company');
-        $companies = Company::all();
+        $companies = Company::get();
 
         return view('page.update',[
             'product' => $product,
-            'products' => $products,
             'companies' => $companies,
         ]);
     }

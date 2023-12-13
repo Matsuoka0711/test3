@@ -12,8 +12,8 @@
         <input class="form-control w-25 justify-content-ceneter me-4" type="text" placeholder="商品名で検索" name="name_search">
         <select class="w-50 me-4 form-select" name="company_id_search" id="">
           <option value="null">選択していません</option>
-          @foreach ($companies as $company)
-          <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+          @foreach ($products as $product)
+          <option name="company_id_search" value="">{{ $product->company->company_name }}</option>
           @endforeach
         </select>
         <button class="btn btn-primary" type="submit">検索</button>
