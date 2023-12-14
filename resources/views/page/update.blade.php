@@ -58,10 +58,10 @@
         <th class="p-3 align-middle">メーカー名</th>
         <td class="p-3 text-sm-start">
             <select class="p-2 w-100 form-select" name="company_id">
-                <option value="">{{ $product->company->company_name }}</option>
+                <option value="{{ $product->company_id }}">{{ $product->company->company_name }}</option>
                 @foreach($companies as $company)
                 @if($product->company->company_name !== $company->company_name)
-                <option>{{ $company->company_name }}</option>
+                <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                 @endif
                 @endforeach
                 @error('company_id')

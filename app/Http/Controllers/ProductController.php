@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     // regist(view)へ推移
     public function showRegistForm() {
-        $companies = Company::get();
+        $companies = Company::all();
 
         return view('page.regist', [
             'companies' => $companies,
@@ -105,13 +105,13 @@ class ProductController extends Controller
 
             $product->updataProduct($request, $file_name, $product);
             
-            DB::commit(); // ②修正済
+            DB::commit();
 
         } catch (Exception $e) {
             return redirect()->route('list')->with('massage', '登録に失敗しました');
             DB::rollBack();
         }
-        return view('page/show', compact('product')); // ②修正済
+        return view('page/show', compact('product'));
         
     }
 

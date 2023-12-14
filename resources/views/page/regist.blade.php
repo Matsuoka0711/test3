@@ -48,10 +48,11 @@
                 
                 <div class="from-group mb-4">
                     <label for="">メーカー名</label>
-                    <select class="p-2 w-100 form-select" name="company_id" id="">
-                    <option value="" selected>選択してください</option> 
+                    <select class="p-2 w-100 form-select" name="company_id">
+                        <option selected>選択してください</option> 
                         @foreach ($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                        <option value="{{ $company->id }}">{{ $company->company_name }}</option> 
+                        <!-- ③修正 -->
                         @endforeach
                     </select>
                     @error('company_id')
