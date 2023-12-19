@@ -2,21 +2,25 @@
 @section('title', '投稿画面')
 @section('content')
 <div class="container">
-  <nav class="d-flex justify-content-end align-items-center mb-4">
-    <div class="w-50">
+  <nav class="d-flex justify-content-between align-items-center mb-4">
+    <div class="w-25">
       <a class="btn btn-success" href="{{ route('regist') }}" role="button">新規登録</a>
     </div>
-    <div class="w-50">
+    <div class="w-75 d-flex justify-content-end">
       <form class="d-flex" action="{{ route('searchPost') }}" method="POST">
         @csrf
         <input class="form-control w-25 justify-content-ceneter me-4" type="text" placeholder="商品名で検索" name="name_search">
-        <select class="w-50 me-4 form-select" name="company_id_search" id="">
+        <select class="w-25 me-4 form-select" name="company_name_search" id="" value="">
           <option value="null">選択していません</option>
           @foreach ($products as $product)
-          <option name="company_id_search" value="">{{ $product->company->company_name }}</option>
+            @if (!isset($usedCompanyNames[$product->company_name]))
+              <option name="company_name_search" value="{{ $product->company_id }}">{{ $product->company_name }}</option>
+              $usedCompanyNames[$product->company_id] = true;
+            @endif
           @endforeach
         </select>
         <button class="btn btn-primary" type="submit">検索</button>
+        <a class="btn btn-danger ms-5" href="{{ route('list') }}" role="button">検索結果クリア</a>
       </form>
     </div>
   </nav>
@@ -25,7 +29,7 @@
   {{ session('massage') }}
   </div>
   @endif
-  {{ $products->links() }}
+
   <div class="row">
     <table class="table table-striped text-center table-bordered">
       <thead>
@@ -61,7 +65,7 @@
             
             <td class="align-middle table-striped">¥{{ $product->price }}</td>
             <td class="align-middle table-striped">{{ $product->stock }}</td>
-            <td class="align-middle table-striped">{{ $product->company->company_name }}</td>
+            <td class="align-middle table-striped">{{ $product->company_name }}</td>
             <td class="align-middle table-striped">
               <a href="{{ route('product.show', $product->id) }}" class="btn btn-warning ">詳細</a>
             </td>

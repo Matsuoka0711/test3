@@ -18,7 +18,7 @@ class CreateProductTable extends Migration
             $table->string('name');
             $table->string('price');
             $table->string('stock');
-            $table->string('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('img_path');
             $table->text('comment')->nullable();
             $table->timestamps();
