@@ -23,10 +23,12 @@ class ProductController extends Controller
     // list(view)へ推移
     public function showList() {
         $products = Product::query()
-        ->join('companies', 'products.company_id', '=', 'companies.id')->get();
+        ->join('companies', 'products.company_id', '=', 'companies.id')->select('products.*', 'companies.company_name')->paginate(4);
+        $companies = Company::all();
 
     return view('page.list', [
         'products' => $products,
+        'companies' => $companies,
     ]);
     }
 
@@ -144,24 +146,29 @@ class ProductController extends Controller
     }
     
     // 検索処理
-    public function searchPost(Request $request) 
-    {
-        $companies = Company::get();
-        if (isset($request->name_search)) {
-            $products = Product::where("name", "LIKE", "%$request->name_search%");
-        }
-        if (isset($request->company_name_search)) {
-            $products = Product::with('company')->where('company_id', $request->company_name_search);
-        }
+    public function searchPost(Request $request)
+{
+    $companies = Company::get();
+    if (isset($request->name_search)) {
+        $query = Product::where("name", "LIKE", "%$request->name_search%");
 
-        $products = $products->appends($request->query())->paginate(3);
-
-        return view('page.list', [
-            'products' => $products,
-            'search' => $request->search,
-            'companies' => $companies,
-        ]);
+        $products = $query->paginate(4);
     }
+    else{
+        $products = Product::join('companies', 'products.company_id', '=', 'companies.id')
+            ->where("company_name", $request->company_name_search)
+            ->select('products.*', 'companies.company_name')
+            ->paginate(4);
+    }
+
+    return view('page.list', [
+        'products' => $products,
+        'search' => $request->search,
+        'companies' => $companies,
+    ]);
+}
+
+
 }
 
 

@@ -66,7 +66,7 @@ class Product extends Model
     public function updataProduct($request, $file_name, $product)
     {
         // dd($file_name);
-            $product->img_path = $file_name;
+        $product->img_path = $file_name;
 
         // その他変更事項を取得
         $product->name = $request->input('name');

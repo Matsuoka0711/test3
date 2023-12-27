@@ -12,11 +12,8 @@
         <input class="form-control w-25 justify-content-ceneter me-4" type="text" placeholder="商品名で検索" name="name_search">
         <select class="w-25 me-4 form-select" name="company_name_search" id="" value="">
           <option value="null">選択していません</option>
-          @foreach ($products as $product)
-            @if (!isset($usedCompanyNames[$product->company_name]))
-              <option name="company_name_search" value="{{ $product->company_id }}">{{ $product->company_name }}</option>
-              $usedCompanyNames[$product->company_id] = true;
-            @endif
+          @foreach ($companies as $company)
+            <option name="company_name_search" value="{{ $company->company_name }}">{{ $company->company_name }}</option>
           @endforeach
         </select>
         <button class="btn btn-primary" type="submit">検索</button>
@@ -28,7 +25,9 @@
   <div class="alert alert-danger">
   {{ session('massage') }}
   </div>
-  @endif
+  @endif 
+
+  {{$products->appends(request()->query())->links()}}
 
   <div class="row">
     <table class="table table-striped text-center table-bordered">
