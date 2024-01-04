@@ -22,8 +22,7 @@ class ProductController extends Controller
 
     // list(view)へ推移
     public function showList() {
-        $products = Product::query()
-        ->join('companies', 'products.company_id', '=', 'companies.id')->select('products.*', 'companies.company_name')->paginate(4);
+        $products = Product::query()->paginate(4);
         $companies = Company::all();
 
     return view('page.list', [
@@ -75,14 +74,15 @@ class ProductController extends Controller
             }
 
             $product->registProduct($request, $file_name);
-            DB::commit();
 
         }catch(Exception $e){
             // 例外処理
-            return redirect()->route('regist')->with('massage', '登録に失敗しました');
+            return redirect()->route('regist')->with('message', '登録に失敗しました');
             DB::rollBack();
         }
-        return redirect()->route('regist')->with('massage', '商品を登録しました');
+        DB::commit();
+
+        return redirect()->route('regist')->with('message', '商品を登録しました');
     }
     
     // 更新処理
@@ -107,13 +107,12 @@ class ProductController extends Controller
                 $file_name = $product->img_path;
             }
 
-
             $product->updataProduct($request, $file_name, $product);
             
             DB::commit();
 
         } catch (Exception $e) {
-            return redirect()->route('list')->with('massage', '登録に失敗しました');
+            return redirect()->route('list')->with('message', '登録に失敗しました');
             DB::rollBack();
         }
         return view('page/show', compact('product'));
@@ -137,37 +136,36 @@ class ProductController extends Controller
             \Illuminate\Support\Facades\File::delete($product->img_path);
 
         } catch (Exception $e) {
-            return redirect()->route('list')->with('massage', '削除に失敗しました');
+            return redirect()->route('list')->with('message', '削除に失敗しました');
             DB::rollBack();
         }
     
         DB::commit();
-        return redirect()->route('list')->with('massage', '削除しました');
+        return redirect()->route('list')->with('message', '削除しました');
     }
     
     // 検索処理
     public function searchPost(Request $request)
-{
-    $companies = Company::get();
-    if (isset($request->name_search)) {
-        $query = Product::where("name", "LIKE", "%$request->name_search%");
+    {
+        $companies = Company::get();
+        if (isset($request->name_search)) {
+            $query = Product::where("name", "LIKE", "%$request->name_search%");
 
-        $products = $query->paginate(4);
+            $products = $query->paginate(4);
+        }
+        else{
+            $products = Product::join('companies', 'products.company_id', '=', 'companies.id')
+                ->where("company_name", $request->company_name_search)
+                ->select('products.*', 'companies.company_name')
+                ->paginate(4);
+        }
+
+        return view('page.list', [
+            'products' => $products,
+            'search' => $request->search,
+            'companies' => $companies,
+        ]);
     }
-    else{
-        $products = Product::join('companies', 'products.company_id', '=', 'companies.id')
-            ->where("company_name", $request->company_name_search)
-            ->select('products.*', 'companies.company_name')
-            ->paginate(4);
-    }
-
-    return view('page.list', [
-        'products' => $products,
-        'search' => $request->search,
-        'companies' => $companies,
-    ]);
-}
-
 
 }
 

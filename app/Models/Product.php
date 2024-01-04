@@ -18,11 +18,9 @@ class Product extends Model
     
     public function getList() {
         $products = DB::table('products')->get();
-        $companies = DB::table('companies')->get();
     
         return [
             'products' => $products,
-            'companies' => $companies,
         ];
     }
 

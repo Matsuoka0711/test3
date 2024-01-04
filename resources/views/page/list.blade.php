@@ -7,7 +7,7 @@
       <a class="btn btn-success" href="{{ route('regist') }}" role="button">新規登録</a>
     </div>
     <div class="w-75 d-flex justify-content-end">
-      <form class="d-flex" action="{{ route('searchPost') }}" method="POST">
+      <form class="d-flex" action="{{ route('searchPost') }}" method="get">
         @csrf
         <input class="form-control w-25 justify-content-ceneter me-4" type="text" placeholder="商品名で検索" name="name_search">
         <select class="w-25 me-4 form-select" name="company_name_search" id="" value="">
@@ -21,13 +21,13 @@
       </form>
     </div>
   </nav>
-  @if (session('massage'))
+  @if (session('message'))
   <div class="alert alert-danger">
-  {{ session('massage') }}
+  {{ session('message') }}
   </div>
   @endif 
 
-  {{$products->appends(request()->query())->links()}}
+  {{ $products->appends(request()->query())->links() }}
 
   <div class="row">
     <table class="table table-striped text-center table-bordered">
@@ -64,7 +64,7 @@
             
             <td class="align-middle table-striped">¥{{ $product->price }}</td>
             <td class="align-middle table-striped">{{ $product->stock }}</td>
-            <td class="align-middle table-striped">{{ $product->company_name }}</td>
+            <td class="align-middle table-striped">{{ $product->company->company_name }}</td>
             <td class="align-middle table-striped">
               <a href="{{ route('product.show', $product->id) }}" class="btn btn-warning ">詳細</a>
             </td>

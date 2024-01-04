@@ -5,9 +5,9 @@
 @section('content')
     <div class="container">
         <a class="btn btn-secondary mb-3" href="{{ route('list') }}" role="button">戻る</a>
-        @if (session('massage'))
+        @if (session('message'))
             <div class="alert alert-success">
-                {{ session('massage') }}
+                {{ session('message') }}
             </div>
         @endif
         <div class="row">
