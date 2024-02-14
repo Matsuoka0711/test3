@@ -2,7 +2,7 @@
 @section('title', '投稿画面')
 @section('content')
 <div class="container">
-  <nav class="d-flex align-items-center">
+  <nav class="d-flex">
     <div>
       <a class="btn btn-success" href="{{ route('regist') }}" role="button">新規登録</a>
     </div>
