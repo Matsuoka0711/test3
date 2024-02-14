@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     // list(view)へ推移
     public function showList() {
-        $products = Product::query()->paginate(4);
+        $products = Product::sortable()->get();
         $companies = Company::all();
 
     return view('page.list', [
@@ -130,7 +130,6 @@ class ProductController extends Controller
             $product->delete();
         
             $products = $product->getList();
-            $product = $product;
 
             // 画像を削除
             \Illuminate\Support\Facades\File::delete($product->img_path);
@@ -141,32 +140,59 @@ class ProductController extends Controller
         }
     
         DB::commit();
-        return redirect()->route('list')->with('message', '削除しました');
+        return response()->json([$products]);
+        // return redirect()->route('list')->with('message', '削除しました');
     }
     
     // 検索処理
     public function searchPost(Request $request)
     {
-        $companies = Company::get();
-        if (isset($request->name_search)) {
-            $query = Product::where("name", "LIKE", "%$request->name_search%");
+        // すべての商品データを取得
+        $products = Product::query();
 
-            $products = $query->paginate(4);
-        }
-        else{
-            $products = Product::join('companies', 'products.company_id', '=', 'companies.id')
-                ->where("company_name", $request->company_name_search)
-                ->select('products.*', 'companies.company_name')
-                ->paginate(4);
+        // 商品名
+        $nameKeyword = $request->name_search;
+        if ($nameKeyword !== null) {
+            $products->where('name', "LIKE", "%$nameKeyword%");
         }
 
-        return view('page.list', [
-            'products' => $products,
-            'search' => $request->search,
-            'companies' => $companies,
-        ]);
+        // メーカー名
+        $companyKeyword = $request->company_name_search;
+        if ($companyKeyword !== null) {
+            $products->join('companies', 'products.company_id', '=', 'companies.id')
+            ->where("company_name", $companyKeyword)
+            ->select('products.*', 'companies.company_name');
+        }
+
+        // 上限価格
+        $maxPrice = $request->max_price_search;
+        if ($maxPrice !== null) {
+            $products->where('price', '<=', $maxPrice);
+        }
+
+        // 下限価格
+        $minPrice = $request->min_price_search;
+        if ($minPrice !== null) {
+            $products->where('price', '>=', $minPrice);
+        }
+
+        // 上限在庫数
+        $maxStock = $request->max_stock_search;
+        if ($maxStock !== null) {
+            $products->where('stock', '<=', $maxStock);
+        }
+
+        // 下限在庫数
+        $minStock = $request->min_stock_search;
+        if ($minStock !== null) {
+            $products->where('stock', '>=', $minStock);
+        }
+
+        // 結果を取得
+        $result = $products->sortable()->get();
+
+        return response($result);
     }
-
 }
 
 

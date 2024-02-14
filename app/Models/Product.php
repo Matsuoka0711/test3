@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Company;
+use Kyslik\ColumnSortable\Sortable;
 
 class Product extends Model
 {
+    use Sortable;
+    
     // companiesテーブルとの関連付け(リレーション)
     public function company()
     {
