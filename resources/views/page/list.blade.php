@@ -53,14 +53,14 @@
     <table class="table table-striped text-center table-bordered" >
       <thead>
         <tr>
-          <th scope="col">ID @sortablelink('id', '↕︎')</th>
-          <th scope="col">商品名 @sortablelink('name', '↕︎')</th>
-          <th scope="col">商品画像</th>
-          <th scope="col">価格 @sortablelink('price', '↕︎')</th>
-          <th scope="col">在庫 @sortablelink('stock', '↕︎')</th>
-          <th scope="col">メーカー名 @sortablelink('company_id', '↕︎')</th>
-          <th scope="col">詳細</th>
-          <th scope="col">削除</th>
+          <th scope="col" id="sort">ID @sortablelink('id', '↕︎')</th>
+          <th scope="col" id="sort">商品名 @sortablelink('name', '↕︎')</th>
+          <th scope="col" id="sort">商品画像</th>
+          <th scope="col" id="sort">価格 @sortablelink('price', '↕︎')</th>
+          <th scope="col" id="sort">在庫 @sortablelink('stock', '↕︎')</th>
+          <th scope="col" id="sort">メーカー名 @sortablelink('company_id', '↕︎')</th>
+          <th scope="col" id="sort">詳細</th>
+          <th scope="col" id="sort">削除</th>
         </tr>
       </thead>
       <tbody id="Content">

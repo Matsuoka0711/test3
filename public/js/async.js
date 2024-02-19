@@ -38,13 +38,18 @@ $(document).ready(function () {
   }
   // 各検索条件が変更された時のイベントリスナー
   $('#name_search, #company_name_search, #max_price_search, #min_price_search, #max_stock_search, #min_stock_search').on('input', search);
+  $('#sort a').click(function() {
+    search();
+  });
 
 
   // 削除機能（非同期処理）
   $('.deleteBtn').click(function() {
     let result =  window.confirm('削除しますか？');
     if(result){
-      let dataId = $(this).data('id');
+      let dataId = $(this).data('id'); // 押したボタンの data-id を取得
+      let row = $(this).closest('tr'); // 削除する行を取得
+
       $.ajax({
         method: 'DELETE',
         type: 'DELETE',
@@ -52,18 +57,8 @@ $(document).ready(function () {
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function(data){
-          var data = data[0].products;
-          $('#Content tr').hide();
-          for (let i = 0; i < data.length; i++) {
-            let product = data[i];
-            let row = $('#Content tr:contains("' + product.id + '")');
-            
-            // 該当する行が存在する場合は表示にする
-            if (row.length > 0) {
-              row.show();
-            }
-          }
+        success: function(){
+          row.remove();
           alert('削除しました。');
         },
         error: function() {

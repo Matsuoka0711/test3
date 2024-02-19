@@ -91,5 +91,42 @@ class Product extends Model
         return Carbon::now();
     }
 
+    // 商品名での検索
+    public function scopeNameSearch($query, $nameKeyword)
+    {
+        return $query->where('name', 'LIKE', "%$nameKeyword%");
+    }
+
+    // メーカー名での検索
+    public function scopeCompanyNameSearch($query, $companyKeyword)
+    {
+        return $query->join('companies', 'products.company_id', '=', 'companies.id')
+                     ->where('company_name', $companyKeyword)
+                     ->select('products.*', 'companies.company_name');
+    }
+
+    // 上限価格での検索
+    public function scopeMaxPriceSearch($query, $maxPrice)
+    {
+        return $query->where('price', '<=', $maxPrice);
+    }
+
+    // 下限価格での検索
+    public function scopeMinPriceSearch($query, $minPrice)
+    {
+        return $query->where('price', '>=', $minPrice);
+    }
+
+    // 上限在庫数での検索
+    public function scopeMaxStockSearch($query, $maxStock)
+    {
+        return $query->where('stock', '<=', $maxStock);
+    }
+
+    // 下限在庫数での検索
+    public function scopeMinStockSearch($query, $minStock)
+    {
+        return $query->where('stock', '>=', $minStock);
+    }
 
 }

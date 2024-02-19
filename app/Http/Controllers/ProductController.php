@@ -147,48 +147,38 @@ class ProductController extends Controller
     // 検索処理
     public function searchPost(Request $request)
     {
-        // すべての商品データを取得
         $products = Product::query();
 
-        // 商品名
         $nameKeyword = $request->name_search;
         if ($nameKeyword !== null) {
-            $products->where('name', "LIKE", "%$nameKeyword%");
+            $products->nameSearch($nameKeyword);
         }
 
-        // メーカー名
         $companyKeyword = $request->company_name_search;
         if ($companyKeyword !== null) {
-            $products->join('companies', 'products.company_id', '=', 'companies.id')
-            ->where("company_name", $companyKeyword)
-            ->select('products.*', 'companies.company_name');
+            $products->companyNameSearch($companyKeyword);
         }
 
-        // 上限価格
         $maxPrice = $request->max_price_search;
         if ($maxPrice !== null) {
-            $products->where('price', '<=', $maxPrice);
+            $products->maxPriceSearch($maxPrice);
         }
 
-        // 下限価格
         $minPrice = $request->min_price_search;
         if ($minPrice !== null) {
-            $products->where('price', '>=', $minPrice);
+            $products->minPriceSearch($minPrice);
         }
 
-        // 上限在庫数
         $maxStock = $request->max_stock_search;
         if ($maxStock !== null) {
-            $products->where('stock', '<=', $maxStock);
+            $products->maxStockSearch($maxStock);
         }
 
-        // 下限在庫数
         $minStock = $request->min_stock_search;
         if ($minStock !== null) {
-            $products->where('stock', '>=', $minStock);
+            $products->minStockSearch($minStock);
         }
 
-        // 結果を取得
         $result = $products->sortable()->get();
 
         return response($result);

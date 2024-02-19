@@ -37,4 +37,3 @@ Route::delete('/delete/{id}', [App\Http\Controllers\ProductController::class, 'p
 
 Route::get('/search', [App\Http\Controllers\ProductController::class, 'searchPost'])->name('searchPost');
 
-Route::get('sale',[App\Http\Controller\SaleController::class,'sale'])->name('sale');
