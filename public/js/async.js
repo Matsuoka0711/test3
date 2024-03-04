@@ -71,4 +71,10 @@ $(document).ready(function () {
       return false;
     }
   })
+  
+  $(document).ready(function() 
+      { 
+          $("#myTable").tablesorter(); 
+      } 
+  );
 });

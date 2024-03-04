@@ -100,9 +100,7 @@ class Product extends Model
     // メーカー名での検索
     public function scopeCompanyNameSearch($query, $companyKeyword)
     {
-        return $query->join('companies', 'products.company_id', '=', 'companies.id')
-                     ->where('company_name', $companyKeyword)
-                     ->select('products.*', 'companies.company_name');
+        return $query->join('companies', 'products.company_id', '=', 'companies.id')->where('company_name', $companyKeyword)->select('products.*', 'companies.company_name');
     }
 
     // 上限価格での検索

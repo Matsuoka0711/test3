@@ -21,15 +21,19 @@ class ProductController extends Controller
     }
 
     // list(view)へ推移
-    public function showList() {
-        $products = Product::sortable()->get();
-        $companies = Company::all();
+public function showList()
+{
+    // 検索条件があれば適用
+    $products = Product::query()->get();
+    $companies = Company::all();
 
     return view('page.list', [
         'products' => $products,
         'companies' => $companies,
     ]);
-    }
+}
+
+
 
     // show(view)へ推移
     public function show($id) 
@@ -179,7 +183,7 @@ class ProductController extends Controller
             $products->minStockSearch($minStock);
         }
 
-        $result = $products->sortable()->get();
+        $result = $products->get();
 
         return response($result);
     }
